@@ -148,70 +148,6 @@ time_tick(void)
 
 int rescue;
 
-static int test_user_abort()
-{
-        char c;
-
-        puts("I: Press Q or ESC to abort boot");
-        CSR_TIMER0_COUNTER = 0;
-        CSR_TIMER0_COMPARE = 2*CSR_FREQUENCY;
-        CSR_TIMER0_CONTROL = TIMER_ENABLE;
-        while(CSR_TIMER0_CONTROL & TIMER_ENABLE) {
-                if(readchar_nonblock()) {
-                        c = readchar();
-                        if((c == 'Q')||(c == '\e')) {
-                                puts("I: Aborted boot on user request");
-                                return 0;
-                        }
-                        if(c == 0x07) {
-                                vga_unblank();
-                                vga_set_console(1);
-                                netboot();
-                                return 0;
-                        }
-                }
-        }
-        return 1;
-}
-
-
-
-/*
-static void boot_sequence()
-{
-        if(test_user_abort()) {
-                if(rescue) {
-                        netboot();
-                        serialboot();
-                        fsboot(BLOCKDEV_MEMORY_CARD);
-                        flashboot();
-                } else {
-                        fsboot(BLOCKDEV_MEMORY_CARD);
-                        flashboot();
-                        netboot();
-                        serialboot();
-                }
-                printf("E: No boot medium found\n");
-        }
-}
-*/
-
-static void ethreset_delay()
-{
-        CSR_TIMER0_COUNTER = 0;
-        CSR_TIMER0_COMPARE = CSR_FREQUENCY >> 2;
-        CSR_TIMER0_CONTROL = TIMER_ENABLE;
-        while(CSR_TIMER0_CONTROL & TIMER_ENABLE);
-}
-
-static void ethreset()
-{
-        CSR_MINIMAC_SETUP = MINIMAC_SETUP_PHYRST;
-        ethreset_delay();
-        CSR_MINIMAC_SETUP = 0;
-        ethreset_delay();
-}
-
 /* main is from Milkymist bios. */
 int port_main(int i, char **c)
 {
@@ -249,7 +185,7 @@ int port_main(int i, char **c)
 while (1)  {
         putsnonl("\e[1mStarting CoreMark\e[0m\n");
         main();
-	putsnonl("\e[1mCoreMark ended.\e[0m ");
+	putsnonl("\e[1mCoreMark ended.\e[0m \n\n");
 }
         return 0;
 }
