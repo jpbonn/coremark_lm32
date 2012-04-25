@@ -1,0 +1,20 @@
+
+These are the Milkmist/LM32 specific files to run the Coremark V1.0 benchmark on the Milkymist One.
+
+A working LM32 toolchain, Clang/LLVM, and qemu is needed to build and run Coremark on the Milkymist. See the Milymist wiki for directions on building and installing these tools:  http://milkymist.org/wiki
+
+Download the Coremark benchmark from http://coremark.org/home.php and extract the files.
+
+Clone the LM32 Coremark files into a subdirectory of the coremark files:
+# cd coremark_v1.0
+# git clone git@github.com:jpbonn/coremark_lm32.git 
+
+Build LM32 Coremark:
+# make XCFLAGS="-DTOTAL_DATA_SIZE=6000" PORT_DIR=coremark_lm32
+
+To run on the Milkymist One hardware:
+# flterm --port /dev/ttyUSB0 --kernel coremark.bin --gdb-passthrough
+lm32-rtems4.11-gdb coremark.out
+
+To run on QEMU simulator:
+# qemu-system-lm32 -M milkymist -kernel coremark.bin -nographic
