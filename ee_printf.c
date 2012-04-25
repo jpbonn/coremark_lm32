@@ -44,7 +44,7 @@ This code is based on a file that contains the following:
 
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 
-static char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
+static char *lower_digits = "0123456789abcdefghijklmnopqrstuvwxyz";
 static char *upper_digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 static size_t strnlen(const char *s, size_t count);
 
@@ -65,7 +65,7 @@ static int ee_skip_atoi(const char **s)
 static char *ee_number(char *str, long num, int base, int size, int precision, int type)
 {
   char c, sign, tmp[66];
-  char *dig = digits;
+  char *dig = lower_digits;
   int i;
 
   if (type & UPPERCASE)  dig = upper_digits;
@@ -127,7 +127,7 @@ static char *ee_number(char *str, long num, int base, int size, int precision, i
     else if (base == 16)
     {
       *str++ = '0';
-      *str++ = digits[33];
+      *str++ = lower_digits[33];
     }
   }
 
@@ -142,7 +142,7 @@ static char *ee_number(char *str, long num, int base, int size, int precision, i
 static char *eaddr(char *str, unsigned char *addr, int size, int precision, int type)
 {
   char tmp[24];
-  char *dig = digits;
+  char *dig = lower_digits;
   int i, len;
 
   if (type & UPPERCASE)  dig = upper_digits;
@@ -173,23 +173,23 @@ static char *iaddr(char *str, unsigned char *addr, int size, int precision, int 
     n = addr[i];
     
     if (n == 0)
-      tmp[len++] = digits[0];
+      tmp[len++] = lower_digits[0];
     else
     {
       if (n >= 100) 
       {
-        tmp[len++] = digits[n / 100];
+        tmp[len++] = lower_digits[n / 100];
         n = n % 100;
-        tmp[len++] = digits[n / 10];
+        tmp[len++] = lower_digits[n / 10];
         n = n % 10;
       }
       else if (n >= 10) 
       {
-        tmp[len++] = digits[n / 10];
+        tmp[len++] = lower_digits[n / 10];
         n = n % 10;
       }
 
-      tmp[len++] = digits[n];
+      tmp[len++] = lower_digits[n];
     }
   }
 
@@ -215,7 +215,7 @@ void ee_bufcpy(char *pd, char *ps, int count) {
 static void parse_float(double value, char *buffer, char fmt, int precision)
 {
   int decpt, sign, exp, pos;
-  char *digits = NULL;
+  char *fdigits = NULL;
   char cvtbuf[80];
   int capexp = 0;
   int magnitude;
@@ -228,7 +228,7 @@ static void parse_float(double value, char *buffer, char fmt, int precision)
 
   if (fmt == 'g')
   {
-    digits = ecvtbuf(value, precision, &decpt, &sign, cvtbuf);
+    fdigits = ecvtbuf(value, precision, &decpt, &sign, cvtbuf);
     magnitude = decpt - 1;
     if (magnitude < -4  ||  magnitude > precision - 1)
     {
@@ -244,12 +244,12 @@ static void parse_float(double value, char *buffer, char fmt, int precision)
 
   if (fmt == 'e')
   {
-    digits = ecvtbuf(value, precision + 1, &decpt, &sign, cvtbuf);
+    fdigits = ecvtbuf(value, precision + 1, &decpt, &sign, cvtbuf);
 
     if (sign) *buffer++ = '-';
-    *buffer++ = *digits;
+    *buffer++ = *fdigits;
     if (precision > 0) *buffer++ = '.';
-    ee_bufcpy(buffer, digits + 1, precision);
+    ee_bufcpy(buffer, fdigits + 1, precision);
     buffer += precision;
     *buffer++ = capexp ? 'E' : 'e';
 
@@ -280,24 +280,24 @@ static void parse_float(double value, char *buffer, char fmt, int precision)
   }
   else if (fmt == 'f')
   {
-    digits = fcvtbuf(value, precision, &decpt, &sign, cvtbuf);
+    fdigits = fcvtbuf(value, precision, &decpt, &sign, cvtbuf);
     if (sign) *buffer++ = '-';
-    if (*digits)
+    if (*fdigits)
     {
       if (decpt <= 0)
       {
         *buffer++ = '0';
         *buffer++ = '.';
         for (pos = 0; pos < -decpt; pos++) *buffer++ = '0';
-        while (*digits) *buffer++ = *digits++;
+        while (*fdigits) *buffer++ = *fdigits++;
       }
       else
       {
         pos = 0;
-        while (*digits)
+        while (*fdigits)
         {
           if (pos++ == decpt) *buffer++ = '.';
-          *buffer++ = *digits++;
+          *buffer++ = *fdigits++;
         }
       }
     }
@@ -586,7 +586,7 @@ void uart_send_char(char c) {
 
 int ee_printf(const char *fmt, ...)
 {
-  char buf[256],*p;
+  char buf[15*80],*p;
   va_list args;
   int n=0;
 
