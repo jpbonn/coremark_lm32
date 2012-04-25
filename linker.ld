@@ -1,6 +1,6 @@
 OUTPUT_FORMAT("elf32-lm32")
 /* ENTRY(_mystart) */
-STARTUP(mico32Full/crt0.o)
+STARTUP(coremark_lm32/crt0.o)
 
 __DYNAMIC = 0;
 

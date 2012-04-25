@@ -9,6 +9,14 @@ Clone the LM32 Coremark files into a subdirectory of the coremark files:
 # cd coremark_v1.0
 # git clone git@github.com:jpbonn/coremark_lm32.git 
 
+Edit coremark_lm32/core_portme.mak and edit the following variables to point to the appropriate directories:
+MMDIR
+COMPILERRT_DIR
+NEWLIB_DIR
+LIBGLOSS_DIR
+
+If you rename the coremark_lm32 directory you'll need to edit the linker.ld linker script in coremark_lm32/linker.ld.
+
 Build LM32 Coremark:
 # make XCFLAGS="-DTOTAL_DATA_SIZE=6000" PORT_DIR=coremark_lm32
 

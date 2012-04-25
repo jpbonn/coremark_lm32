@@ -1,6 +1,6 @@
 #File : core_portme.mak
 # Command line:
-#  make XCFLAGS="-DTOTAL_DATA_SIZE=6000 -DMAIN_HAS_NOARGC=1" PORT_DIR=mico32 clean
+#  make XCFLAGS="-DTOTAL_DATA_SIZE=6000 -DMAIN_HAS_NOARGC=1" PORT_DIR=coremark_lm32 clean
 
 # We utilize the Milkymist bios for I/O and timer.
 MMDIR          = /home/jpbonn/Documents/mico32/milkymist
