@@ -4,15 +4,16 @@
 
 # We utilize the Milkymist bios for I/O and timer.
 MMDIR          = /home/jpbonn/Documents/mico32/milkymist
+MMDIR          = /opt/milkymist/milkymist/
 #############################################################################
 # Mico32 toolchain
 #
-COMPILERRT_DIR=/home/jpbonn/Documents/mico32/compiler-rt/mico32/emb
+COMPILERRT_DIR=/home/jp/Documents/baseline/compiler-rt-lm32/lm32/emb
 # try out the gcc compiled lm32-elf newlib instead of our clang compiled one
 NEWLIB_DIR=/home/jpbonn/Documents/mico32/lm32-gcc/install/lm32-elf
 # use the clang compiled newlib
-NEWLIB_DIR=/home/jpbonn/Documents/mico32/newlib/build/install/lm32-elf
-LIBGLOSS_DIR=/home/jpbonn/Documents/mico32/newlib/build-libgloss/lm32
+NEWLIB_DIR=/home/jp/Documents/baseline/newlib/build/install/lm32-elf
+LIBGLOSS_DIR=/home/jp/Documents/baseline/newlib/build-libgloss/install/lib/
 
 # Toolchain options
 #
@@ -33,13 +34,13 @@ PORT_CFLAGS = -g -O9 -Wall -Wstrict-prototypes -Wold-style-definition -Wshadow \
 # Flag : OUTFLAG
 #	Use this flag to define how to to get an executable (e.g -o)
 OUTFLAG= -o
-CC=clang -march=mico32 -ccc-host-triple mico32-elf -ccc-gcc-name lm32-rtems4.11-gcc
+CC=clang -march=lm32 -ccc-host-triple lm32 -ccc-gcc-name lm32-rtems4.11-gcc
 LD		= lm32-rtems4.11-ld
 AS		= lm32-rtems4.11-as
 OBJCOPY		= lm32-rtems4.11-objcopy
 # Flag : CFLAGS
 #	Use this flag to define compiler options. Note, you can add compiler options from the command line using XCFLAGS="other flags"
-#PORT_CFLAGS = -O0 -g -march=mico32 -ccc-host-triple mico32-elf -ccc-gcc-name lm32-rtems4.11-gcc 
+#PORT_CFLAGS = -O0 -g -march=lm32 -ccc-host-triple lm32 -ccc-gcc-name lm32-rtems4.11-gcc 
 FLAGS_STR = "$(PORT_CFLAGS) $(XCFLAGS) $(XLFLAGS) $(LFLAGS_END)"
 CFLAGS = $(PORT_CFLAGS) -I$(PORT_DIR) -I. -DFLAGS_STR=\"$(FLAGS_STR)\" 
 #Flag : LFLAGS_END
@@ -55,7 +56,7 @@ OFLAG 	= -o
 COUT 	= -c
 
 #LFLAGS_END = --end-group  -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet -L$(NEWLIB_DIR)/lib --start-group -lbase-light -lhal -lc -lm --end-group -L$(COMPILERRT_DIR) -lcompiler_rt 
-LFLAGS_END = --end-group  -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet -L$(NEWLIB_DIR)/lib --start-group -lbase-light -lhal -lc -lm --end-group -L$(COMPILERRT_DIR) -lcompiler_rt -L$(LIBGLOSS_DIR) -lgloss
+LFLAGS_END = --end-group  -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet -L$(NEWLIB_DIR)/lib --start-group -lbase-light -lhal -lc -lm --end-group -L$(COMPILERRT_DIR) -lcompiler_rt -L$(LIBGLOSS_DIR) -lnosys
 #LFLAGS_END = --end-group  -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet -L$(NEWLIB_DIR)/lib --start-group -lbase-light -lhal -lc -lm --end-group -L$(COMPILERRT_DIR) -lcompiler_rt
  
 # Flag : PORT_SRCS
