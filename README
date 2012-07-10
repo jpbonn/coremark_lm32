@@ -1,7 +1,6 @@
-
 These are the Milkmist/LM32 specific files to run the Coremark V1.0 benchmark on the Milkymist One.
 
-A working LM32 toolchain, Clang/LLVM, and qemu is needed to build and run Coremark on the Milkymist. See the Milymist wiki for directions on building and installing these tools:  http://milkymist.org/wiki
+A working LM32 toolchain, Clang/LLVM, and qemu is needed to build and run Coremark on the Milkymist. See the Milymist wiki for directions on building and installing these tools:  http://milkymist.org/wiki/index.php?title=RTEMS_build_instructions
 
 Download the Coremark benchmark from http://coremark.org/home.php and extract the files.
 
