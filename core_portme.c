@@ -8,7 +8,7 @@
 #include "coremark.h"
 #include "core_portme.h"
 
-#include <hal/time.h>
+#include "time.h"
 
 #if VALIDATION_RUN
 	volatile ee_s32 seed1_volatile=0x3415;
@@ -37,7 +37,7 @@
 static unsigned int time = 0;
 CORETIMETYPE barebones_clock() {
 
-	struct timestamp dest;
+	timestamp dest;
 	time_get(&dest);
 	return dest.sec*1000 + dest.usec/1000;
 
@@ -106,39 +106,8 @@ ee_u32 default_num_contexts=1;
 extern int main(void);
 
 /* External Milkymist functions: */
-void splash_display();
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <console.h>
-#include <string.h>
-#include <uart.h>
-#include <blockdev.h>
-#include <fatfs.h>
-/* #include <crc.h> */
-#include <system.h>
-#include <board.h>
-#include <irq.h>
-#include <version.h>
-#include <net/mdio.h>
-#include <hw/fmlbrg.h>
-#include <hw/sysctl.h>
-#include <hw/gpio.h>
-#include <hw/flash.h>
-#include <hw/minimac.h>
-
-#include <hal/vga.h>
-#include <hal/tmu.h>
-#include <hal/brd.h>
-#include <hal/usb.h>
-#include <hal/ukb.h>
-
-static const char banner[] =
-        "\nMILKYMIST(tm) v"VERSION" BIOS   http://www.milkymist.org\n"
-        "(c) Copyright 2007, 2008, 2009, 2010, 2011 Sebastien Bourdeauducq\n\n"
-        "This program is free software: you can redistribute it and/or modify\n"
-        "it under the terms of the GNU General Public License as published by\n"
-        "the Free Software Foundation, version 3 of the License.\n\n";
+#include "sysctl.h"
+#include "irq.h"
 
 void
 time_tick(void)
@@ -157,30 +126,11 @@ int port_main(int i, char **c)
         /* enable bus errors */
         CSR_DBG_CTRL = DBG_CTRL_BUS_ERR_EN;
 
-        CSR_GPIO_OUT = GPIO_LED1;
-        rescue = !((unsigned int)main > FLASH_OFFSET_REGULAR_BIOS);
-
         irq_setmask(0);
         irq_enable(1);
 	time_init();
         uart_init();
-//        vga_init(!(rescue || (CSR_GPIO_IN & GPIO_BTN2)));
-        putsnonl(banner);
-//        crcbios();
-//        brd_init();
-//        tmu_init(); /* < for hardware-accelerated scrolling */
-//        usb_init();
-//        ukb_init();
 
-        if(rescue)
-                printf("I: Booting in rescue mode\n");
-
-//        splash_display();
-//        ethreset(); /* < that pesky ethernet PHY needs two resets at times... */
-//        print_mac();
-//        boot_sequence();
-//        vga_unblank();
-//        vga_set_console(1);
     uart_force_sync(1);
 while (1)  {
         putsnonl("\e[1mStarting CoreMark\e[0m\n");

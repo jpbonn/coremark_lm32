@@ -1,6 +1,6 @@
 /*
  * Milkymist SoC (Software)
- * Copyright (C) 2007, 2008, 2009, 2010 Sebastien Bourdeauducq
+ * Copyright (C) 2007, 2008, 2009 Sebastien Bourdeauducq
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,9 +15,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __SPLASH_H
-#define __SPLASH_H
+#ifndef __HAL_TIME_H
+#define __HAL_TIME_H
 
-void splash_display();
+struct timestamp {
+	int sec;
+	int usec;
+};
+typedef struct timestamp timestamp;
 
-#endif /* __SPLASH_H */
+void time_init(void);
+void time_isr(void);
+
+void time_get(timestamp *ts);
+
+void time_add(timestamp *dest, timestamp *delta);
+void time_diff(timestamp *dest, timestamp *t1, timestamp *t0);
+
+void time_tick(void); /* provided by app */
+
+#endif /* __HAL_TIME_H */

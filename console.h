@@ -15,29 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "interrupts.h"
-#include "irq.h"
-#include "time.h"
+#ifndef __CONSOLE_H
+#define __CONSOLE_H
 
-//#include <usb.h>
+typedef void (*console_write_hook)(char);
+typedef char (*console_read_hook)(void);
+typedef int (*console_read_nonblock_hook)(void);
 
-//void tmu_isr();
+void console_set_write_hook(console_write_hook h);
+void console_set_read_hook(console_read_hook r, console_read_nonblock_hook rn);
 
-void isr()
-{
-	unsigned int irqs;
+char readchar(void);
+int readchar_nonblock(void);
 
-	irqs = irq_pending() & irq_getmask();
+int puts(const char *s);
+void putsnonl(const char *s);
 
-	if(irqs & IRQ_UART)
-		uart_isr();
-		
-//	if(irqs & IRQ_TMU)
-//		tmu_isr();
-
-	if(irqs & IRQ_TIMER0)
-		time_isr();
-
-//	if(irqs & IRQ_USB)
-//		usb_isr();
-}
+#endif /* __CONSOLE_H */

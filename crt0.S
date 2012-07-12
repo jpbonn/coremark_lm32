@@ -133,6 +133,8 @@ _crt0:
 	mvi     r2, 0
 	mvi     r3, 0
 	calli   port_main
+.global     abort
+abort:
 .end:
 	bi	.end
 

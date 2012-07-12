@@ -18,8 +18,8 @@ LIBGLOSS_DIR=/home/jp/Documents/baseline/newlib/build-libgloss/install/lib/
 # Toolchain options
 #
 #INCLUDES_NOLIBC ?= -nostdinc -I$(MMDIR)/software/include/base ASFD
-INCLUDES_NOLIBC ?= -I$(MMDIR)/software/include/base
-INCLUDES = $(INCLUDES_NOLIBC) -I$(MMDIR)/software/include -I$(MMDIR)/tools -I$(NEWLIB_DIR)/include
+INCLUDES_NOLIBC ?=
+INCLUDES = $(INCLUDES_NOLIBC) -I$(NEWLIB_DIR)/include
 #ASFLAGS = $(INCLUDES) -nostdinc
 ASFLAGS = $(INCLUDES)
 # later: -Wmissing-prototypes
@@ -56,7 +56,7 @@ OFLAG 	= -o
 COUT 	= -c
 
 #LFLAGS_END = --end-group  -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet -L$(NEWLIB_DIR)/lib --start-group -lbase-light -lhal -lc -lm --end-group -L$(COMPILERRT_DIR) -lcompiler_rt 
-LFLAGS_END = --end-group  -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet -L$(NEWLIB_DIR)/lib --start-group -lbase-light -lhal -lc -lm --end-group -L$(COMPILERRT_DIR) -lcompiler_rt -L$(LIBGLOSS_DIR) -lnosys
+LFLAGS_END = --end-group  -L$(NEWLIB_DIR)/lib -lm -L$(COMPILERRT_DIR) -lcompiler_rt
 #LFLAGS_END = --end-group  -L$(MMDIR)/software/libhpdmc -L$(MMDIR)/software/libbase -L$(MMDIR)/software/libhal -L$(MMDIR)/software/libnet -L$(NEWLIB_DIR)/lib --start-group -lbase-light -lhal -lc -lm --end-group -L$(COMPILERRT_DIR) -lcompiler_rt
  
 # Flag : PORT_SRCS
@@ -69,7 +69,7 @@ vpath %.s $(PORT_DIR)
 # Flag: PORT_OBJS
 # Port specific object files can be added here
 #PORT_OBJS = $(PORT_DIR)/crt0.o $(PORT_DIR)/core_portme.o $(PORT_DIR)/ee_printf.o $(PORT_DIR)/isr.o
-PORT_OBJS = $(PORT_DIR)/core_portme.o $(PORT_DIR)/ee_printf.o $(PORT_DIR)/isr.o
+PORT_OBJS = $(PORT_DIR)/core_portme.o $(PORT_DIR)/ee_printf.o $(PORT_DIR)/isr.o $(PORT_DIR)/time.o $(PORT_DIR)/uart.o $(PORT_DIR)/console.o $(PORT_DIR)/cvt.o
 PORT_CLEAN = $(PORT_DIR)/*.o *.bin *.out *.fbi *.o
 
 

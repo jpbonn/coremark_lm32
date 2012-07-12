@@ -15,12 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __BOOT_H
-#define __BOOT_H
+#ifndef __HW_COMMON_H
+#define __HW_COMMON_H
 
-void serialboot();
-void netboot();
-void fsboot(int devnr);
-void flashboot();
+#ifdef __ASSEMBLER__
+#define MMPTR(x) x
+#else
+#define MMPTR(x) (*((volatile unsigned int *)(x)))
+#endif
 
-#endif /* __BOOT_H */
+#endif
