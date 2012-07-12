@@ -25,8 +25,19 @@ Build LM32 Coremark:
 # make XCFLAGS="-DTOTAL_DATA_SIZE=6000" PORT_DIR=coremark_lm32
 
 To run on the Milkymist One hardware:
+- In one terminal
 # flterm --port /dev/ttyUSB0 --kernel coremark.bin --gdb-passthrough
-lm32-rtems4.11-gdb coremark.out
+- In second terminal
+# lm32-rtems4.11-gdb coremark.out
+(gdb) set remote interrupt-on-connect on
+Press middle button then quickly enter:
+(gdb) target remote <pseudo terminal printed by flterm>
+Remote debugging using /dev/pts/5
+0x00860650 in ?? ()
+(gdb) load
+(gdb) set $PC=_mystart
+(gdb) c
+
 
 To run on QEMU simulator:
 # qemu-system-lm32 -M milkymist -kernel coremark.bin -nographic
